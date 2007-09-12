@@ -1,4 +1,4 @@
-Carp-REPL 0.10
+Carp-REPL 0.11
 
 Carp::REPL is a drop-in module for getting a REPL (read-eval-print-loop)
 which helps you in examining the state of the world when things blew up.

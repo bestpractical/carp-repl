@@ -17,11 +17,11 @@ Carp::REPL - read-eval-print-loop on die
 
 =head1 VERSION
 
-Version 0.10 released 11 Sep 07
+Version 0.11 released ???
 
 =cut
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 =head1 SYNOPSIS
 
