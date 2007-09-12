@@ -3,6 +3,7 @@ package Devel::REPL::Plugin::LexEnvCarp;
 use Moose::Role;
 use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;
+use Data::Dump::Streamer;
 
 has 'environments' => (
     isa => 'ArrayRef',
@@ -75,6 +76,12 @@ around 'read' => sub
   if ($line =~ /^\s*:b?t\s*$/)
   {
     print $self->backtrace;
+    return '';
+  }
+
+  if ($line =~ /^\s*:e?(?:nv)?\s*$/)
+  {
+    Dump($self->environments->[$self->frame])->Names('Env')->Out;
     return '';
   }
 
