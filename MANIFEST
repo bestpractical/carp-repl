@@ -29,6 +29,7 @@ t/08-alias.t
 t/09-args.t
 t/10-nodie.t
 t/11-warn.t
+t/12-env.t
 t/99-bug.t
 t/boilerplate.t
 t/scripts/01-trivial.pl
@@ -40,3 +41,4 @@ t/scripts/07-frame.pl
 t/scripts/08-alias.pl
 t/scripts/09-args.pl
 t/scripts/11-warn.pl
+t/scripts/12-env.pl
