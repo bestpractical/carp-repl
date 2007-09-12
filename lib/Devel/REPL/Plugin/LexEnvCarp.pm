@@ -137,7 +137,7 @@ Devel::REPL::Plugin::LexEnvCarp - Devel::REPL plugin for Carp::REPL
 
 =head1 VERSION
 
-Version 0.10 released ???
+Version 0.10 released 11 Sep 07
 
 =cut
 

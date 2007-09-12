@@ -4,9 +4,11 @@ Carp::REPL is a drop-in module for getting a REPL (read-eval-print-loop)
 which helps you in examining the state of the world when things blew up.
 Essentially, you just add -MCarp::REPL to your script's invocation. One
 advantage of using Carp::REPL over Devel::REPL is the lexical variables are
-made available, as well as stack manipulation commands.
+made available, as well as stack manipulation commands and auto-installation
+of the die handler.
 
 MAJOR CHANGES
+    0.10: :e to display current environment
     0.08: 'nodie' and 'warn'
     0.07: sub arguments stuffed into $_a
     0.06: proper aliases so you can influence the environment

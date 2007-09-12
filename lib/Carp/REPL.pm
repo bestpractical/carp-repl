@@ -17,7 +17,7 @@ Carp::REPL - read-eval-print-loop on die
 
 =head1 VERSION
 
-Version 0.10 released ???
+Version 0.10 released 11 Sep 07
 
 =cut
 
@@ -92,7 +92,7 @@ variables and those changes will be seen by the rest of your program.
 
 Unfortunately if you instead go with the usual C<-MCarp::REPL>, then
 C<$SIG{__DIE__}> will be invoked and there's no general way to recover. But you
-can still change variables and poke at things.
+can still change variables to poke at things.
 
 =cut
 
@@ -168,6 +168,10 @@ Moves one frame down in the stack.
 =item * :t
 
 Redisplay the stack trace.
+
+=item * :e
+
+Display the current lexical environment.
 
 =item * :q
 

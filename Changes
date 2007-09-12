@@ -1,6 +1,7 @@
 Revision history for Carp-REPL
 
-0.10
+0.10    Tue Sep 11 20:07:10 2007
+        :e command to display the current environment
 
 0.09    Thu Jul 12 12:32:12 2007
         Move to Module::Install
