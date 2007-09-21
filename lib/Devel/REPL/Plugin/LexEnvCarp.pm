@@ -138,11 +138,11 @@ Devel::REPL::Plugin::LexEnvCarp - Devel::REPL plugin for Carp::REPL
 
 =head1 VERSION
 
-Version 0.11 released 20 Sep 07
+Version 0.12 released ???
 
 =cut
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 =head1 SYNOPSIS
 

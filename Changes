@@ -1,5 +1,7 @@
 Revision history for Carp-REPL
 
+0.12
+
 0.11    Thu Sep 20 21:43:56 2007
         Devel::REPL configuration is now applied        
 
