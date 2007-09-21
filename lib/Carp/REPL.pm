@@ -101,7 +101,7 @@ sub repl
     warn @_, "\n"; # tell the user what blew up
 
     require PadWalker;
-    require Devel::REPL;
+    require Devel::REPL::Script;
 
     my (@packages, @environments, @argses, $backtrace);
 
@@ -135,16 +135,16 @@ sub repl
 
     warn $backtrace;
 
-    my $repl = Devel::REPL->new;
+    my $repl = Devel::REPL::Script->new;
 
     # LexEnv must come before LexEnvCarp
-    $repl->load_plugin($_) for qw/History LexEnv LexEnvCarp/;
+    $repl->_repl->load_plugin($_) for qw/LexEnv LexEnvCarp/;
 
-    $repl->environments(\@environments);
-    $repl->packages(\@packages);
-    $repl->argses(\@argses);
-    $repl->backtrace($backtrace);
-    $repl->frame(0);
+    $repl->_repl->environments(\@environments);
+    $repl->_repl->packages(\@packages);
+    $repl->_repl->argses(\@argses);
+    $repl->_repl->backtrace($backtrace);
+    $repl->_repl->frame(0);
 
     $repl->run;
 }
