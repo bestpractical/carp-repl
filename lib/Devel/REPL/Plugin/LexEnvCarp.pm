@@ -1,5 +1,6 @@
 package Devel::REPL::Plugin::LexEnvCarp;
 
+use 5.6.0;
 use Moose::Role;
 use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;

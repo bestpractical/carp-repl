@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Carp::REPL;
+use Carp::REPL 'noprofile';
 
 my $numerator = 10;
 my $denominator = 0;

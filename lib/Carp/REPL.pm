@@ -1,11 +1,14 @@
 package Carp::REPL;
 use strict;
 use warnings;
+use 5.6.0;
+our $noprofile = 0;
 
 sub import
 {
     my $nodie = grep {$_ eq 'nodie'} @_;
     my $warn  = grep {$_ eq 'warn' } @_;
+    $noprofile = grep {$_ eq 'noprofile'} @_;
 
     $SIG{__DIE__} = \&repl unless $nodie;
     $SIG{__WARN__} = \&repl if $warn;
@@ -62,6 +65,11 @@ is generated.
     use Carp::REPL 'warn', 'nodie';
 
 I don't see why you would want to do this, but it's available. :)
+
+    use Carp::REPL 'noprofile';
+
+Don't load any per-user L<Devel::REPL> configuration (really only useful for
+testing).
 
 =head1 FUNCTIONS
 
@@ -135,18 +143,27 @@ sub repl
 
     warn $backtrace;
 
-    my $repl = Devel::REPL::Script->new;
+    my ($runner, $repl);
 
-    # LexEnv must come before LexEnvCarp
-    $repl->_repl->load_plugin($_) for qw/LexEnv LexEnvCarp/;
+    if ($noprofile)
+    {
+        $repl = $runner = Devel::REPL->new;
+        $repl->load_plugin('LexEnv');
+    }
+    else
+    {
+        $runner = Devel::REPL::Script->new;
+        $repl = $runner->_repl;
+    }
 
-    $repl->_repl->environments(\@environments);
-    $repl->_repl->packages(\@packages);
-    $repl->_repl->argses(\@argses);
-    $repl->_repl->backtrace($backtrace);
-    $repl->_repl->frame(0);
+    $repl->load_plugin('LexEnvCarp');
 
-    $repl->run;
+    $repl->environments(\@environments);
+    $repl->packages(\@packages);
+    $repl->argses(\@argses);
+    $repl->backtrace($backtrace);
+    $repl->frame(0);
+    $runner->run;
 }
 
 =head1 COMMANDS
