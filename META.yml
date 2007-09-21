@@ -1,5 +1,5 @@
 --- 
-abstract: read-eval-print-loop on die
+abstract: read-eval-print-loop on die and/or warn
 author: Shawn M Moore, C<< <sartak at gmail.com> >>
 build_requires: 
   Test::Expect: 0
@@ -17,6 +17,7 @@ no_index:
     - t
   package: 
     - DB
+    - Devel::REPL::Plugin::LexEnvCarp
 requires: 
   Data::Dump::Streamer: 0
   Devel::LexAlias: 0
@@ -25,4 +26,5 @@ requires:
   Moose::Role: 0
   PadWalker: 0
   namespace::clean: 0
-version: 0.10
+  perl: 5.6.0
+version: 0.11

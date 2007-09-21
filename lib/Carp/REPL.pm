@@ -16,11 +16,11 @@ sub import
 
 =head1 NAME
 
-Carp::REPL - read-eval-print-loop on die
+Carp::REPL - read-eval-print-loop on die and/or warn
 
 =head1 VERSION
 
-Version 0.11 released ???
+Version 0.11 released 20 Sep 07
 
 =cut
 
