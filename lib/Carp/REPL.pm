@@ -148,7 +148,6 @@ sub repl
     if ($noprofile)
     {
         $repl = $runner = Devel::REPL->new;
-        $repl->load_plugin('LexEnv');
     }
     else
     {

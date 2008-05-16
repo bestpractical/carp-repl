@@ -6,6 +6,8 @@ use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;
 use Data::Dump::Streamer;
 
+with qw(Devel::REPL::Plugin::LexEnv);
+
 has 'environments' => (
     isa => 'ArrayRef',
     is => 'rw',
