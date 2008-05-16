@@ -86,15 +86,11 @@ Carp::REPL - read-eval-print-loop on die and/or warn
 
 =head1 VERSION
 
-Version 0.12 released ???
+Version 0.12 released 16 May 08
 
 =head1 SYNOPSIS
 
 The intended way to use this module is through the command line.
-
-    perl tps-report.pl
-        Can't call method "cover_sheet" without a package or object reference at tps-report.pl line 6019.
-
 
     perl -MCarp::REPL tps-report.pl
         Can't call method "cover_sheet" without a package or object reference at tps-report.pl line 6019.
@@ -107,8 +103,8 @@ The intended way to use this module is through the command line.
     $ $self->get_form
     27B/6
 
-    $ "ah ha! there's my bug"
-    ah ha! there's my bug
+    $ "ah ha! there's my bug, I thought get_form returned an object"
+    ah ha! there's my bug, I thought get_form returned an object
 
 =head1 USAGE
 
