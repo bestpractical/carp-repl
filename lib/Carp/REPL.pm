@@ -2,6 +2,8 @@ package Carp::REPL;
 use strict;
 use warnings;
 use 5.6.0;
+our $VERSION = '0.12';
+
 our $noprofile = 0;
 
 sub import {
@@ -13,6 +15,68 @@ sub import {
     $SIG{__WARN__} = \&repl if $warn;
 }
 
+sub repl {
+    warn @_, "\n"; # tell the user what blew up
+
+    require PadWalker;
+    require Devel::REPL::Script;
+
+    my (@packages, @environments, @argses, $backtrace);
+
+    my $frame = 0;
+    while (1) {
+        package DB;
+        my ($package, $file, $line, $subroutine) = caller($frame)
+            or last;
+        $package = 'main' if !defined($package);
+
+        eval {
+            # PadWalker has 0 mean 'current'
+            # caller has 0 mean 'immediate caller'
+            push @environments, PadWalker::peek_my($frame+1);
+        };
+
+        Carp::carp($@), last if $@;
+
+        push @argses, [@DB::args];
+        push @packages, [$package, $file, $line];
+
+        $backtrace .= sprintf "%s%d: %s called at %s:%s.\n",
+            $frame == 0 ? '' : '   ',
+            $frame,
+            $subroutine,
+            $file,
+            $line;
+
+        ++$frame;
+    }
+
+    warn $backtrace;
+
+    my ($runner, $repl);
+
+    if ($noprofile) {
+        $repl = $runner = Devel::REPL->new;
+    }
+    else {
+        $runner = Devel::REPL::Script->new;
+        $repl = $runner->_repl;
+    }
+
+    $repl->load_plugin('Carp::REPL');
+
+    $repl->environments(\@environments);
+    $repl->packages(\@packages);
+    $repl->argses(\@argses);
+    $repl->backtrace($backtrace);
+    $repl->frame(0);
+    $runner->run;
+}
+
+1;
+
+__END__
+
 =head1 NAME
 
 Carp::REPL - read-eval-print-loop on die and/or warn
@@ -20,10 +84,6 @@ Carp::REPL - read-eval-print-loop on die and/or warn
 =head1 VERSION
 
 Version 0.12 released ???
-
-=cut
-
-our $VERSION = '0.12';
 
 =head1 SYNOPSIS
 
@@ -97,66 +157,6 @@ variables and those changes will be seen by the rest of your program.
 Unfortunately if you instead go with the usual C<-MCarp::REPL>, then
 C<$SIG{__DIE__}> will be invoked and there's no general way to recover. But you
 can still change variables to poke at things.
-
-=cut
-
-sub repl {
-    warn @_, "\n"; # tell the user what blew up
-
-    require PadWalker;
-    require Devel::REPL::Script;
-
-    my (@packages, @environments, @argses, $backtrace);
-
-    my $frame = 0;
-    while (1) {
-        package DB;
-        my ($package, $file, $line, $subroutine) = caller($frame)
-            or last;
-        $package = 'main' if !defined($package);
-
-        eval {
-            # PadWalker has 0 mean 'current'
-            # caller has 0 mean 'immediate caller'
-            push @environments, PadWalker::peek_my($frame+1);
-        };
-
-        Carp::carp($@), last if $@;
-
-        push @argses, [@DB::args];
-        push @packages, [$package, $file, $line];
-
-        $backtrace .= sprintf "%s%d: %s called at %s:%s.\n",
-            $frame == 0 ? '' : '   ',
-            $frame,
-            $subroutine,
-            $file,
-            $line;
-
-        ++$frame;
-    }
-
-    warn $backtrace;
-
-    my ($runner, $repl);
-
-    if ($noprofile) {
-        $repl = $runner = Devel::REPL->new;
-    }
-    else {
-        $runner = Devel::REPL::Script->new;
-        $repl = $runner->_repl;
-    }
-
-    $repl->load_plugin('Carp::REPL');
-
-    $repl->environments(\@environments);
-    $repl->packages(\@packages);
-    $repl->argses(\@argses);
-    $repl->backtrace($backtrace);
-    $repl->frame(0);
-    $runner->run;
-}
 
 =head1 COMMANDS
 
@@ -268,12 +268,10 @@ Thanks to Matt Trout and Stevan Little for their advice.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 Best Practical Solutions, all rights reserved.
+Copyright 2007-2008 Best Practical Solutions, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
 
 =cut
-
-1; # End of Carp::REPL
 
