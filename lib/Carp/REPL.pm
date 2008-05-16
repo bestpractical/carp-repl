@@ -4,13 +4,12 @@ use warnings;
 use 5.6.0;
 our $noprofile = 0;
 
-sub import
-{
-    my $nodie = grep {$_ eq 'nodie'} @_;
-    my $warn  = grep {$_ eq 'warn' } @_;
-    $noprofile = grep {$_ eq 'noprofile'} @_;
+sub import {
+    my $nodie  = grep { $_ eq 'nodie'    } @_;
+    my $warn   = grep { $_ eq 'warn'     } @_;
+    $noprofile = grep { $_ eq 'noprofile'} @_;
 
-    $SIG{__DIE__} = \&repl unless $nodie;
+    $SIG{__DIE__}  = \&repl unless $nodie;
     $SIG{__WARN__} = \&repl if $warn;
 }
 
@@ -33,43 +32,40 @@ The intended way to use this module is through the command line.
     perl tps-report.pl
         Can't call method "cover_sheet" without a package or object reference at tps-report.pl line 6019.
 
+
     perl -MCarp::REPL tps-report.pl
         Can't call method "cover_sheet" without a package or object reference at tps-report.pl line 6019.
 
-        $ map {"$_\n"} $form, $subform
-        27B/6
-        Report::TPS::Subreport=HASH(0x86da61c)
+    # instead of exiting, you get a REPL!
+
+    $ $form
+    27B/6
+
+    $ $self->get_form
+    27B/6
+
+    $ "ah ha! there's my bug"
+    ah ha! there's my bug
 
 =head1 USAGE
 
-    -MCarp::REPL
+=head2 C<-MCarp::REPL>
+=head2 C<-MCarp::REPL=warn>
 
 Works as command line argument. This automatically installs the die handler for
 you, so if you receive a fatal error you get a REPL before the universe
-explodes.
+explodes. Specifying C<=warn> also installs a warn handler for finding those
+mysterious warnings.
 
-    use Carp::REPL;
+=head2 C<use Carp::REPL;>
+=head2 C<use Carp::REPL 'warn';>
 
 Same as above.
 
-    use Carp::REPL 'nodie';
+=head2 C<use Carp::REPL 'nodie';>
 
-Loads the module without installing the die handler. Use this if you just want to
-run C<Carp::REPL::repl> on your own terms.
-
-    use Carp::REPL 'warn';
-
-Same as C<Carp::REPL> but also installs REPL to be invoked whenever a warning
-is generated.
-
-    use Carp::REPL 'warn', 'nodie';
-
-I don't see why you would want to do this, but it's available. :)
-
-    use Carp::REPL 'noprofile';
-
-Don't load any per-user L<Devel::REPL> configuration (really only useful for
-testing).
+Loads the module without installing the die handler. Use this if you just want
+to run C<Carp::REPL::repl> on your own terms.
 
 =head1 FUNCTIONS
 
@@ -104,8 +100,7 @@ can still change variables to poke at things.
 
 =cut
 
-sub repl
-{
+sub repl {
     warn @_, "\n"; # tell the user what blew up
 
     require PadWalker;
@@ -114,19 +109,18 @@ sub repl
     my (@packages, @environments, @argses, $backtrace);
 
     my $frame = 0;
-    while (1)
-    {
+    while (1) {
         package DB;
         my ($package, $file, $line, $subroutine) = caller($frame)
             or last;
         $package = 'main' if !defined($package);
 
-        eval
-        {
+        eval {
             # PadWalker has 0 mean 'current'
             # caller has 0 mean 'immediate caller'
             push @environments, PadWalker::peek_my($frame+1);
         };
+
         Carp::carp($@), last if $@;
 
         push @argses, [@DB::args];
@@ -138,6 +132,7 @@ sub repl
             $subroutine,
             $file,
             $line;
+
         ++$frame;
     }
 
@@ -145,12 +140,10 @@ sub repl
 
     my ($runner, $repl);
 
-    if ($noprofile)
-    {
+    if ($noprofile) {
         $repl = $runner = Devel::REPL->new;
     }
-    else
-    {
+    else {
         $runner = Devel::REPL::Script->new;
         $repl = $runner->_repl;
     }
@@ -188,6 +181,10 @@ Redisplay the stack trace.
 =item * :e
 
 Display the current lexical environment.
+
+=item * :l
+
+List eleven lines of source code of the current frame.
 
 =item * :q
 

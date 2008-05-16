@@ -20,6 +20,5 @@ build_requires  'Test::More'           => 0;
 no_index package => 'DB';
 no_index package => 'Devel::REPL::Plugin::Carp::REPL';
 
-auto_install;
 WriteAll;
 
