@@ -2,7 +2,7 @@ package Carp::REPL;
 use strict;
 use warnings;
 use 5.6.0;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use base 'Exporter';
 our @EXPORT_OK = 'repl';
@@ -86,7 +86,7 @@ Carp::REPL - read-eval-print-loop on die and/or warn
 
 =head1 VERSION
 
-Version 0.12 released 16 May 08
+Version 0.13 released ???
 
 =head1 SYNOPSIS
 
