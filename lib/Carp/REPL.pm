@@ -4,6 +4,9 @@ use warnings;
 use 5.6.0;
 our $VERSION = '0.12';
 
+use base 'Exporter';
+our @EXPORT_OK = 'repl';
+
 our $noprofile = 0;
 
 sub import {
@@ -142,14 +145,13 @@ One useful place for calling this manually is if you just want to check the
 state of things without having to throw a fake error. You can also change any
 variables and those changes will be seen by the rest of your program.
 
-    use Carp::REPL;
+    use Carp::REPL 'repl';
 
-    sub involved_calculation
-    {
+    sub involved_calculation {
         # ...
         $d = maybe_zero();
         # ...
-        Carp::REPL::repl; # $d = 1
+        repl(); # $d = 1
         $sum += $n / $d;
         # ...
     }
@@ -224,41 +226,9 @@ Shawn M Moore, C<< <sartak at gmail.com> >>
 
 =head1 BUGS
 
-No known bugs at this point. To expect that to stay true is laughably naive. :)
-
 Please report any bugs or feature requests to
 C<bug-carp-repl at rt.cpan.org>, or through the web interface at
 L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Carp-REPL>.
-I will be notified, and then you'll automatically be notified of progress on
-your bug as I make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Carp::REPL
-
-You can also look for information at:
-
-=over 4
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Carp-REPL>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Carp-REPL>
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Carp-REPL>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Carp-REPL>
-
-=back
 
 =head1 ACKNOWLEDGEMENTS
 
