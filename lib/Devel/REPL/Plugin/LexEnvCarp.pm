@@ -72,31 +72,58 @@ around 'read' => sub
   my ($self, @rest) = @_;
   my $line = $self->$orig(@rest);
 
-  return if !defined($line) || $line =~ /^\s*:q\s*$/;
+  return if !defined($line) || $line =~ /^\s*:q\s*/;
 
-  if ($line =~ /^\s*:b?t\s*$/)
+  if ($line =~ /^\s*:b?t\s*/)
   {
     print $self->backtrace;
     return '';
   }
 
-  if ($line =~ /^\s*:e?(?:nv)?\s*$/)
-  {
-    Dump($self->environments->[$self->frame])->Names('Env')->Out;
-    return '';
-  }
-
-  if ($line =~ /^\s*:up?\s*$/)
+  if ($line =~ /^\s*:up?\s*/)
   {
     $self->frame($self->frame + 1);
     return '';
   }
 
-  if ($line =~ /^\s*:d(?:own)?\s*$/)
+  if ($line =~ /^\s*:d(?:own)?\s*/)
   {
     $self->frame($self->frame - 1);
     return '';
   }
+
+  if ($line =~ /^\s*:l(?:ist)?\s*/) {
+    my ($package, $file, $num) = @{$self->packages->[$self->frame]};
+    open my $handle, '<', $file or do {
+        warn "Unable to open $file for reading: $!\n";
+        return '';
+    };
+    my @code = <$handle>;
+
+    my $min = $num - 6;
+    my $max = $num + 4;
+    $min = 0 if $min < 0;
+    $max = $#code if $max > $#code;
+
+    for my $cur ($min .. $max) {
+        next if !defined($code[$cur]);
+
+        printf "%s%*d: %s",
+                $cur + 1 == $num ? '*' : ' ',
+                length($max),
+                $cur + 1,
+                $code[$cur];
+    }
+
+    return '';
+  }
+
+  if ($line =~ /^\s*:e?(?:nv)?\s*/)
+  {
+    Dump($self->environments->[$self->frame])->Names('Env')->Out;
+    return '';
+  }
+
 
   return $line;
 };
