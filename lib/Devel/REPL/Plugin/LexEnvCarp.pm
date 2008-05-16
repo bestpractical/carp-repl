@@ -96,6 +96,7 @@ around 'read' => sub {
         $min = 0 if $min < 0;
         $max = $#code if $max > $#code;
 
+        print "File $file:\n";
         for my $cur ($min .. $max) {
             next if !defined($code[$cur]);
 
