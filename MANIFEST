@@ -33,7 +33,6 @@ t/11-warn.t
 t/12-env.t
 t/13-list.t
 t/99-bug.t
-t/boilerplate.t
 t/scripts/01-trivial.pl
 t/scripts/02-lexicals.pl
 t/scripts/03-subs.pl

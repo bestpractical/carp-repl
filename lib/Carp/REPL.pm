@@ -200,8 +200,7 @@ Close the REPL. (C<^D> also works)
 
 =item * $_REPL
 
-This represents the Devel::REPL object (with the LexEnvCarp plugin, among
-others, mixed in).
+This represents the Devel::REPL object.
 
 =item * $_a
 
