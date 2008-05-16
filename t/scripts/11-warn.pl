@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!perl
 use strict;
 use warnings;
 use Carp::REPL qw/warn noprofile/;

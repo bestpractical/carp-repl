@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!perl
 
 package Other::Package;
 sub other_package
