@@ -1,6 +1,4 @@
 package Devel::REPL::Plugin::Carp::REPL;
-
-use 5.6.0;
 use Moose::Role;
 use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;
@@ -155,15 +153,7 @@ __END__
 
 =head1 NAME
 
-Devel::REPL::Plugin::LexEnvCarp - Devel::REPL plugin for Carp::REPL
-
-=head1 VERSION
-
-Version 0.12 released ???
-
-=cut
-
-our $VERSION = '0.12';
+Devel::REPL::Plugin::Carp::REPL - Devel::REPL plugin for Carp::REPL
 
 =head1 SYNOPSIS
 
@@ -184,7 +174,7 @@ Please report any bugs to a medium given by Carp::REPL.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007 Best Practical Solutions, all rights reserved.
+Copyright 2007-2008 Best Practical Solutions, all rights reserved.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
