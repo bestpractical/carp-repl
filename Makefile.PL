@@ -18,7 +18,7 @@ build_requires  'Test::Expect'         => 0;
 build_requires  'Test::More'           => 0;
 
 no_index package => 'DB';
-no_index package => 'Devel::REPL::Plugin::LexEnvCarp';
+no_index package => 'Devel::REPL::Plugin::Carp::REPL';
 
 auto_install;
 WriteAll;

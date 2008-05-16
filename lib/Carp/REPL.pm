@@ -155,7 +155,7 @@ sub repl
         $repl = $runner->_repl;
     }
 
-    $repl->load_plugin('LexEnvCarp');
+    $repl->load_plugin('Carp::REPL');
 
     $repl->environments(\@environments);
     $repl->packages(\@packages);

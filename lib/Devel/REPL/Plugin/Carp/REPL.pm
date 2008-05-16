@@ -1,4 +1,4 @@
-package Devel::REPL::Plugin::LexEnvCarp;
+package Devel::REPL::Plugin::Carp::REPL;
 
 use 5.6.0;
 use Moose::Role;
