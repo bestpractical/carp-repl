@@ -18,7 +18,7 @@ no_index:
     - t
   package: 
     - DB
-    - Devel::REPL::Plugin::LexEnvCarp
+    - Devel::REPL::Plugin::Carp::REPL
 requires: 
   Data::Dump::Streamer: 0
   Devel::LexAlias: 0

@@ -237,7 +237,7 @@ Thanks to Matt Trout and Stevan Little for their advice.
 
 =head1 COPYRIGHT & LICENSE
 
-Copyright 2007-2008 Best Practical Solutions, all rights reserved.
+Copyright 2007-2008 Best Practical Solutions.
 
 This program is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
