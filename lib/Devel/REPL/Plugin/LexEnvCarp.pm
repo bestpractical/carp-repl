@@ -129,14 +129,14 @@ around 'mangle_line' => sub {
                        map {"my $_;"}
                        keys %{ $self->environments->[$frame] };
 
-    my $aliases = << 'ALIASES';
+    my $aliases = << '    ALIASES';
     while (my ($k, $v) = each %{ $_REPL->environments->[$_REPL->frame] }) {
         Devel::LexAlias::lexalias 0, $k, $v;
     }
     my $_a; Devel::LexAlias::lexalias 0, '$_a', \$_REPL->argses->[$_REPL->frame];
     ALIASES
 
-    return << "CODE";
+    return << "    CODE";
     package $package;
     no warnings 'misc'; # declaration in same scope masks earlier instance
     no strict 'vars';   # so we get all the global variables in our package
