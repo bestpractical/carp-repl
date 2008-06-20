@@ -71,22 +71,32 @@ around 'read' => sub {
 
     return if !defined($line) || $line =~ /^\s*:q\s*/;
 
-    if ($line =~ /^\s*:b?t\s*/) {
+    if ($line =~ /^\s*:b?t\b/) {
         print $self->backtrace;
         return '';
     }
 
-    if ($line =~ /^\s*:up?\s*/) {
+    if ($line =~ /^\s*:top\b/) {
+        $self->frame(@{ $self->packages } - 1);
+        return '';
+    }
+
+    if ($line =~ /^\s*:bot(?:tom)?\b/) {
+        $self->frame(0);
+        return '';
+    }
+
+    if ($line =~ /^\s*:up?\b/) {
         $self->frame($self->frame + 1);
         return '';
     }
 
-    if ($line =~ /^\s*:d(?:own)?\s*/) {
+    if ($line =~ /^\s*:d(?:own)?\b/) {
         $self->frame($self->frame - 1);
         return '';
     }
 
-    if ($line =~ /^\s*:l(?:ist)?\s*/) {
+    if ($line =~ /^\s*:l(?:ist)?\b/) {
         my ($package, $file, $num) = @{$self->packages->[$self->frame]};
         open my $handle, '<', $file or do {
             warn "Unable to open $file for reading: $!\n";

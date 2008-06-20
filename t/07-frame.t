@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use Test::More tests => 48;
+use Test::More tests => 54;
 use Test::Expect;
 
 expect_run
@@ -76,3 +76,13 @@ expect_like(qr{^   4: main::fib called at t/scripts/07-frame\.pl:9\.}m);
 expect_like(qr{^   5: main::fib called at t/scripts/07-frame\.pl:9\.}m);
 expect_like(qr{^   6: main::fib called at t/scripts/07-frame\.pl:9\.}m);
 expect_like(qr{^   7: main::fib called at t/scripts/07-frame\.pl:12\.}m);
+
+expect_send(':bottom');
+expect_like(qr{\bNow at t/scripts/07-frame\.pl:8 \(frame 0\)\.});
+
+expect_send('$m');
+expect_like(qr/^\s*\$m\s*$/m);
+
+expect_send(':top');
+expect_like(qr{\bNow at t/scripts/07-frame\.pl:12 \(frame 7\)\.});
+

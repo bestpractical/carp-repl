@@ -192,6 +192,14 @@ Moves one frame up in the stack.
 
 Moves one frame down in the stack.
 
+=item * :top
+
+Moves to the top frame of the stack.
+
+=item * :bottom
+
+Moves to the bottom frame of the stack.
+
 =item * :t
 
 Redisplay the stack trace.
