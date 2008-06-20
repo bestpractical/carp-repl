@@ -12,10 +12,24 @@ our $noprofile = 0;
 sub import {
     my $nodie  = grep { $_ eq 'nodie'    } @_;
     my $warn   = grep { $_ eq 'warn'     } @_;
+    my $test   = grep { $_ eq 'test'     } @_;
     $noprofile = grep { $_ eq 'noprofile'} @_;
 
     $SIG{__DIE__}  = \&repl unless $nodie;
     $SIG{__WARN__} = \&repl if $warn;
+
+    if ($test) {
+        require Test::Builder;
+        my $ok = \&Test::Builder::ok;
+
+        no warnings 'redefine';
+        *Test::Builder::ok = sub {
+            local $Test::Builder::Level = $Test::Builder::Level + 1;
+            my $passed = $ok->(@_);
+            repl() if !$passed;
+            return $passed;
+        };
+    }
 }
 
 sub repl {
