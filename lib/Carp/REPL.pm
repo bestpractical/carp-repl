@@ -8,6 +8,7 @@ use base 'Exporter';
 our @EXPORT_OK = 'repl';
 
 our $noprofile = 0;
+our $bottom_frame = 0;
 
 sub import {
     my $nodie  = grep { $_ eq 'nodie'    } @_;
@@ -40,30 +41,34 @@ sub repl {
 
     my (@packages, @environments, @argses, $backtrace);
 
+    my $skip = $bottom_frame;
     my $frame = 0;
     while (1) {
-        package DB;
-        my ($package, $file, $line, $subroutine) = caller($frame)
-            or last;
-        $package = 'main' if !defined($package);
+        if ($skip-- <= 0) {
+            package DB;
+            my ($package, $file, $line, $subroutine) = caller($frame)
+                or last;
+            $package = 'main' if !defined($package);
 
-        eval {
-            # PadWalker has 0 mean 'current'
-            # caller has 0 mean 'immediate caller'
-            push @environments, PadWalker::peek_my($frame+1);
-        };
+            eval {
+                # PadWalker has 0 mean 'current'
+                # caller has 0 mean 'immediate caller'
+                push @environments, PadWalker::peek_my($frame+1);
+            };
 
-        Carp::carp($@), last if $@;
+            Carp::carp($@), last if $@;
 
-        push @argses, [@DB::args];
-        push @packages, [$package, $file, $line];
+            push @argses, [@DB::args];
+            push @packages, [$package, $file, $line];
 
-        $backtrace .= sprintf "%s%d: %s called at %s:%s.\n",
-            $frame == 0 ? '' : '   ',
-            $frame,
-            $subroutine,
-            $file,
-            $line;
+            my $frame_display = $frame - $bottom_frame;
+            $backtrace .= sprintf "%s%d: %s called at %s:%s.\n",
+                $frame_display == 0 ? '' : '   ',
+                $frame_display,
+                $subroutine,
+                $file,
+                $line;
+        }
 
         ++$frame;
     }
