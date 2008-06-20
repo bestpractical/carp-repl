@@ -1,10 +1,13 @@
 package Devel::REPL::Plugin::Carp::REPL;
-use Moose::Role;
+use Devel::REPL::Plugin;
 use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;
 use Data::Dump::Streamer;
 
-with qw(Devel::REPL::Plugin::LexEnv);
+sub BEFORE_PLUGIN {
+    my $self = shift;
+    $self->load_plugin('LexEnv');
+}
 
 has 'environments' => (
     isa => 'ArrayRef',
