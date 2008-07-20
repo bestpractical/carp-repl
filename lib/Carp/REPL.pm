@@ -129,6 +129,7 @@ The intended way to use this module is through the command line.
 =head1 USAGE
 
 =head2 C<-MCarp::REPL>
+
 =head2 C<-MCarp::REPL=warn>
 
 Works as command line argument. This automatically installs the die handler for
@@ -137,6 +138,7 @@ explodes. Specifying C<=warn> also installs a warn handler for finding those
 mysterious warnings.
 
 =head2 C<use Carp::REPL;>
+
 =head2 C<use Carp::REPL 'warn';>
 
 Same as above.
