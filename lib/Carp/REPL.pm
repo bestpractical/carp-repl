@@ -50,6 +50,8 @@ sub repl {
 
     $repl->load_plugin('Carp::REPL');
 
+    warn $repl->stacktrace;
+
     $runner->run;
 }
 
