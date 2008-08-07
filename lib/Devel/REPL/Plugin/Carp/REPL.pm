@@ -1,7 +1,8 @@
 package Devel::REPL::Plugin::Carp::REPL;
 use Devel::REPL::Plugin;
-use namespace::clean -except => [ 'meta' ];
+#use namespace::clean -except => [ 'meta' ];
 use Devel::LexAlias;
+use Devel::StackTrace::WithLexicals;
 use Data::Dump::Streamer;
 
 sub BEFORE_PLUGIN {
@@ -9,57 +10,53 @@ sub BEFORE_PLUGIN {
     $self->load_plugin('LexEnv');
 }
 
-has 'environments' => (
-    isa => 'ArrayRef',
-    is => 'rw',
-    required => 1,
-    default => sub { [{}] },
+has stacktrace => (
+    is      => 'ro',
+    isa     => 'Devel::StackTrace::WithLexicals',
+    handles => [qw/frame_count/],
+    default => sub {
+        my $stacktrace = Devel::StackTrace::WithLexicals->new(
+            ignore_class => ['Carp::REPL', __PACKAGE__],
+        );
+
+        shift @{ $stacktrace->{raw} }
+            until @{ $stacktrace->{raw} } == 0
+               || $stacktrace->{raw}[0]{caller}[3] eq 'Carp::REPL::repl';
+
+        return $stacktrace;
+    },
 );
 
-has 'packages' => (
-    isa      => 'ArrayRef',
-    is       => 'rw',
-    required => 1,
-    default  => sub { ['main'] },
+has frame_index => (
+    is      => 'rw',
+    isa     => 'Int',
+    default => 0,
 );
 
-has 'argses' => (
-    isa      => 'ArrayRef',
-    is       => 'rw',
-    required => 1,
-    default  => sub { [[]] },
-);
+sub frame {
+    my $self = shift;
+    my $i = @_ ? shift : $self->frame_index;
 
-has 'frame' => (
-    isa      => 'Int',
-    is       => 'rw',
-    required => 1,
-    default  => 0,
-);
+    return $self->stacktrace->frame($i);
+}
 
-has 'backtrace' => (
-    isa      => 'Str',
-    is       => 'rw',
-    required => 1,
-    default  => '',
-);
-
-around 'frame' => sub {
+around 'frame_index' => sub {
     my $orig = shift;
-    my ($self, $frame) = @_;
+    my ($self, $index) = @_;
 
-    return $orig->(@_) if !defined($frame);
+    return $orig->(@_) if !defined($index);
 
-    if ($frame < 0) {
+    if ($index < 0) {
         warn "You're already at the bottom frame.\n";
     }
-    elsif ($frame >= @{ $self->packages }) {
+    elsif ($index >= $self->frame_count) {
         warn "You're already at the top frame.\n";
     }
     else {
-        my ($package, $file, $line) = @{$self->packages->[$frame]};
-        print "Now at $file:$line (frame $frame).\n";
         $orig->(@_);
+        my $frame = $self->frame;
+        my ($file, $line) = ($frame->filename, $frame->line);
+        $self->print("Now at $file:$line (frame $index).");
     }
 };
 
@@ -72,32 +69,33 @@ around 'read' => sub {
     return if !defined($line) || $line =~ /^\s*:q\s*/;
 
     if ($line =~ /^\s*:b?t\b/) {
-        print $self->backtrace;
+        $self->print($self->stacktrace);
         return '';
     }
 
     if ($line =~ /^\s*:top\b/) {
-        $self->frame(@{ $self->packages } - 1);
+        $self->frame_index($self->frame_count - 1);
         return '';
     }
 
-    if ($line =~ /^\s*:bot(?:tom)?\b/) {
-        $self->frame(0);
+    if ($line =~ /^\s*:b(?:ot(?:tom)?)?\b/) {
+        $self->frame_index(0);
         return '';
     }
 
     if ($line =~ /^\s*:up?\b/) {
-        $self->frame($self->frame + 1);
+        $self->frame_index($self->frame_index + 1);
         return '';
     }
 
     if ($line =~ /^\s*:d(?:own)?\b/) {
-        $self->frame($self->frame - 1);
+        $self->frame_index($self->frame_index - 1);
         return '';
     }
 
     if ($line =~ /^\s*:l(?:ist)?\b/) {
-        my ($package, $file, $num) = @{$self->packages->[$self->frame]};
+        my $frame = $self->frame;
+        my ($file, $num) = ($frame->filename, $frame->line);
         open my $handle, '<', $file or do {
             warn "Unable to open $file for reading: $!\n";
             return '';
@@ -109,22 +107,22 @@ around 'read' => sub {
         $min = 0 if $min < 0;
         $max = $#code if $max > $#code;
 
-        print "File $file:\n";
+        $self->print("File $file:\n");
         for my $cur ($min .. $max) {
             next if !defined($code[$cur]);
 
-            printf "%s%*d: %s",
-                    $cur + 1 == $num ? '*' : ' ',
-                    length($max),
-                    $cur + 1,
-                    $code[$cur];
+            $self->print(sprintf "%s%*d: %s",
+                            $cur + 1 == $num ? '*' : ' ',
+                            length($max),
+                            $cur + 1,
+                            $code[$cur]);
         }
 
         return '';
     }
 
-    if ($line =~ /^\s*:e?(?:nv)?\s*/) {
-        Dump($self->environments->[$self->frame])->Names('Env')->Out;
+    if ($line =~ /^\s*:e(?:nv)?\s*/) {
+        $self->print(Dump($self->frame->lexicals)->Names('Env')->Out);
         return '';
     }
 
@@ -137,17 +135,17 @@ around 'mangle_line' => sub {
     my $line = $self->$orig(@rest);
 
     my $frame = $self->frame;
-    my $package = $self->packages->[$frame][0];
+    my $package = $frame->package;
 
     my $declarations = join "\n",
                        map {"my $_;"}
-                       keys %{ $self->environments->[$frame] };
+                       keys %{ $frame->lexicals };
 
     my $aliases = << '    ALIASES';
-    while (my ($k, $v) = each %{ $_REPL->environments->[$_REPL->frame] }) {
+    while (my ($k, $v) = each %{ $_REPL->frame->lexicals }) {
         Devel::LexAlias::lexalias 0, $k, $v;
     }
-    my $_a; Devel::LexAlias::lexalias 0, '$_a', \$_REPL->argses->[$_REPL->frame];
+    my $_a; Devel::LexAlias::lexalias 0, '$_a', \$_REPL->frame->{args};
     ALIASES
 
     return << "    CODE";

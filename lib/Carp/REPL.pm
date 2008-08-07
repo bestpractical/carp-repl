@@ -37,47 +37,9 @@ sub import {
 sub repl {
     warn @_, "\n"; # tell the user what blew up
 
-    require PadWalker;
     require Devel::REPL::Script;
 
-    my (@packages, @environments, @argses, $backtrace);
-
-    my $skip = $bottom_frame;
-    my $frame = 0;
-    while (1) {
-        if ($skip-- <= 0) {
-            package DB;
-            my ($package, $file, $line, $subroutine) = caller($frame)
-                or last;
-            $package = 'main' if !defined($package);
-
-            eval {
-                # PadWalker has 0 mean 'current'
-                # caller has 0 mean 'immediate caller'
-                push @environments, PadWalker::peek_my($frame+1);
-            };
-
-            Carp::carp($@), last if $@;
-
-            push @argses, [@DB::args];
-            push @packages, [$package, $file, $line];
-
-            my $frame_display = $frame - $bottom_frame;
-            $backtrace .= sprintf "%s%d: %s called at %s:%s.\n",
-                $frame_display == 0 ? '' : '   ',
-                $frame_display,
-                $subroutine,
-                $file,
-                $line;
-        }
-
-        ++$frame;
-    }
-
-    warn $backtrace;
-
     my ($runner, $repl);
-
     if ($noprofile) {
         $repl = $runner = Devel::REPL->new;
     }
@@ -88,11 +50,6 @@ sub repl {
 
     $repl->load_plugin('Carp::REPL');
 
-    $repl->environments(\@environments);
-    $repl->packages(\@packages);
-    $repl->argses(\@argses);
-    $repl->backtrace($backtrace);
-    $repl->frame(0);
     $runner->run;
 }
 
