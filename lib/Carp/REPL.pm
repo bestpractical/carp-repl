@@ -107,6 +107,12 @@ Same as above.
 Loads the module without installing the die handler. Use this if you just want
 to run C<Carp::REPL::repl> on your own terms.
 
+=head2 C<use Carp::REPL 'test';>
+
+=head2 C<-MCarp::REPL=test>
+
+Load a REPL on test failure! (as long as it uses L<Test::More/ok>)
+
 =head1 FUNCTIONS
 
 =head2 repl
