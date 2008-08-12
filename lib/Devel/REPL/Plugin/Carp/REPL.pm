@@ -19,6 +19,7 @@ has stacktrace => (
             ignore_class => ['Carp::REPL', __PACKAGE__],
         );
 
+        # skip all the Moose metaclass frames
         shift @{ $stacktrace->{raw} }
             until @{ $stacktrace->{raw} } == 0
                || $stacktrace->{raw}[0]{caller}[3] eq 'Carp::REPL::repl';

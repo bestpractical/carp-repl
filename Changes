@@ -1,6 +1,9 @@
 Revision history for Carp-REPL
 
 0.13
+        Fix longstanding "not nested deeply enough" bug
+            Caused by not skipping over "eval" frames
+        Move a lot of code into a new dist, Devel::StackTrace::WithLexicals
 
 0.12    Fri May 16 11:17:55 2008
         :l(ist) command for printing source code
