@@ -63,10 +63,6 @@ __END__
 
 Carp::REPL - read-eval-print-loop on die and/or warn
 
-=head1 VERSION
-
-Version 0.13 released ???
-
 =head1 SYNOPSIS
 
 The intended way to use this module is through the command line.
