@@ -102,6 +102,7 @@ around 'read' => sub {
             return '';
         };
         my @code = <$handle>;
+        chomp @code;
 
         my $min = $num - 6;
         my $max = $num + 4;
