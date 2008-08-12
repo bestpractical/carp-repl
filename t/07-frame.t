@@ -1,7 +1,7 @@
 #!perl
 use strict;
 use warnings;
-use Test::More tests => 54;
+use Test::More tests => 55;
 use Test::Expect;
 
 expect_run
@@ -12,14 +12,15 @@ expect_run
 );
 
 # examine the stack trace
-expect_like(qr{^0: Carp::REPL::repl called at t/scripts/07-frame\.pl:8\.}m);
-expect_like(qr{^   1: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   2: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   3: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   4: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   5: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   6: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   7: main::fib called at t/scripts/07-frame\.pl:12\.}m);
+expect_like(qr{^can't do negatives! at t/scripts/07-frame\.pl line 8\.}m);
+expect_like(qr{^Trace begun at t/scripts/07-frame\.pl line 8}m);
+expect_like(qr{^main::fib\(-1\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(0\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(1\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(2\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(3\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(4\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{^main::fib\(5\) called at t/scripts/07-frame\.pl line 12}m);
 
 expect_send('1 + 1');
 expect_like(qr/\b2\b/, 'in the REPL');
@@ -68,14 +69,14 @@ expect_like(qr/^\s*\$m\s*$/m);
 
 expect_send(':t');
 # examine the stack trace
-expect_like(qr{^0: Carp::REPL::repl called at t/scripts/07-frame\.pl:8\.}m);
-expect_like(qr{^   1: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   2: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   3: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   4: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   5: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   6: main::fib called at t/scripts/07-frame\.pl:9\.}m);
-expect_like(qr{^   7: main::fib called at t/scripts/07-frame\.pl:12\.}m);
+expect_like(qr{Trace begun at t/scripts/07-frame\.pl line 8}m);
+expect_like(qr{main::fib\(-1\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(0\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(1\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(2\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(3\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(4\) called at t/scripts/07-frame\.pl line 9}m);
+expect_like(qr{main::fib\(5\) called at t/scripts/07-frame\.pl line 12}m);
 
 expect_send(':bottom');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:8 \(frame 0\)\.});
