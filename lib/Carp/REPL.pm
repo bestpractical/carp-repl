@@ -27,7 +27,7 @@ sub import {
         *Test::Builder::ok = sub {
             local $Test::Builder::Level = $Test::Builder::Level + 1;
             my $passed = $ok->(@_);
-            $bottom_frame = $Test::Builder::Level;
+            local $bottom_frame = $Test::Builder::Level;
             repl("Test failure") if !$passed;
             return $passed;
         };
