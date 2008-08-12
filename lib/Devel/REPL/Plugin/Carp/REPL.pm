@@ -113,16 +113,19 @@ around 'read' => sub {
         $min = 0 if $min < 0;
         $max = $#code if $max > $#code;
 
+        my @lines;
         $self->print("File $file:\n");
         for my $cur ($min .. $max) {
             next if !defined($code[$cur]);
 
-            $self->print(sprintf "%s%*d: %s",
+            push @lines, sprintf "%s%*d: %s",
                             $cur + 1 == $num ? '*' : ' ',
                             length($max),
                             $cur + 1,
-                            $code[$cur]);
+                            $code[$cur];
         }
+
+        $self->print(join "\n", @lines);
 
         return '';
     }
