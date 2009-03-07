@@ -35,7 +35,9 @@ sub import {
 }
 
 sub repl {
-    warn @_, "\n"; # tell the user what blew up
+    my $quiet = @_ && !defined($_[0]);
+
+    warn @_, "\n" unless $quiet; # tell the user what blew up
 
     require Devel::REPL::Script;
 
@@ -50,7 +52,7 @@ sub repl {
 
     $repl->load_plugin('Carp::REPL');
 
-    warn $repl->stacktrace;
+    warn $repl->stacktrace unless $quiet;
 
     $runner->run;
 }
