@@ -2,7 +2,7 @@ package Carp::REPL;
 use strict;
 use warnings;
 use 5.6.0;
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use base 'Exporter';
 our @EXPORT_OK = 'repl';
