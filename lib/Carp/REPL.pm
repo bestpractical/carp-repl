@@ -4,9 +4,6 @@ use warnings;
 use 5.6.0;
 our $VERSION = '0.14';
 
-use base 'Exporter';
-our @EXPORT_OK = 'repl';
-
 our $noprofile = 0;
 our $bottom_frame = 0;
 
@@ -17,11 +14,26 @@ sub import {
     $noprofile = grep { $_ eq 'noprofile'} @_;
     my $repl   = grep { $_ eq 'repl'     } @_;
 
-    if ( $repl ) {
-        # undef is $package var that Exporter doesn't make use of (yet)
-        __PACKAGE__->export_to_level( 1, undef, 'repl' ); 
-    }
+    if ($repl) {
 
+        require Sub::Exporter;
+        my $import_repl = Sub::Exporter::build_exporter(
+            {
+                exports    => ['repl'],
+                into_level => 1,
+            }
+        );
+
+        # get option of 'repl'
+        my $seen;
+        my ($maybe_option) = grep { $seen || $_ eq 'repl' && $seen++ } @_;
+
+        # now do the real 'repl' import
+        $import_repl->( __PACKAGE__, 'repl',
+            ref $maybe_option ? $maybe_option : ()
+        );
+    }
+    
     $SIG{__DIE__}  = \&repl unless $nodie;
     $SIG{__WARN__} = \&repl if $warn;
 
