@@ -15,6 +15,12 @@ sub import {
     my $warn   = grep { $_ eq 'warn'     } @_;
     my $test   = grep { $_ eq 'test'     } @_;
     $noprofile = grep { $_ eq 'noprofile'} @_;
+    my $repl   = grep { $_ eq 'repl'     } @_;
+
+    if ( $repl ) {
+        # undef is $package var that Exporter doesn't make use of (yet)
+        __PACKAGE__->export_to_level( 1, undef, 'repl' ); 
+    }
 
     $SIG{__DIE__}  = \&repl unless $nodie;
     $SIG{__WARN__} = \&repl if $warn;
