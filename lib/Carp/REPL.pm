@@ -1,7 +1,7 @@
 package Carp::REPL;
 use strict;
 use warnings;
-use 5.6.0;
+use 5.006000;
 our $VERSION = '0.14';
 
 our $noprofile = 0;
