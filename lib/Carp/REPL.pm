@@ -224,7 +224,7 @@ even difficult!) solution to this. Therefore it's a caveat and not a bug. :)
 
 =head1 SEE ALSO
 
-L<Devel::REPL>, L<Devel::ebug>
+L<Devel::REPL>, L<Devel::ebug>, L<Enbugger>, L<CGI::Inspect>
 
 =head1 AUTHOR
 
