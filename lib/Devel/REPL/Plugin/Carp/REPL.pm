@@ -138,6 +138,7 @@ around 'read' => sub {
     return $line;
 };
 
+# Provide an alias for each lexical in the current stack frame
 around 'mangle_line' => sub {
     my $orig = shift;
     my ($self, @rest) = @_;
@@ -145,10 +146,11 @@ around 'mangle_line' => sub {
 
     my $frame = $self->frame;
     my $package = $frame->package;
+    my $lexicals = $frame->lexicals;
 
     my $declarations = join "\n",
                        map {"my $_;"}
-                       keys %{ $frame->lexicals };
+                       keys %$lexicals;
 
     my $aliases = << '    ALIASES';
     while (my ($k, $v) = each %{ $_REPL->frame->lexicals }) {
