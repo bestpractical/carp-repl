@@ -1,7 +1,8 @@
 use inc::Module::Install;
 
-name     'Carp-REPL';
-all_from 'lib/Carp/REPL.pm';
+name       'Carp-REPL';
+all_from   'lib/Carp/REPL.pm';
+repository 'http://github.com/bestpractical/carp-repl';
 
 requires 'Devel::StackTrace::WithLexicals' => 0;
 requires 'Devel::LexAlias'                 => 0;
