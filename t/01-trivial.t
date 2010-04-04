@@ -8,7 +8,7 @@ use Test::Expect;
 
 expect_run
 (
-    command => 'perl -Ilib -MCarp::REPL=noprofile t/scripts/01-trivial.pl',
+    command => "$^X -Ilib -MCarp::REPL=noprofile t/scripts/01-trivial.pl",
     prompt  => '$ ',
     quit    => 'exit',
 );

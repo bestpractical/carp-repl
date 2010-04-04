@@ -6,7 +6,7 @@ use Test::Expect;
 
 expect_run
 (
-    command => 'perl -Ilib t/scripts/11-warn.pl',
+    command => "$^X -Ilib t/scripts/11-warn.pl",
     prompt  => '$ ',
     quit    => 'exit',
 );
