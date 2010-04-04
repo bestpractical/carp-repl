@@ -1,3 +1,4 @@
+#!perl
 use inc::Module::Install;
 
 name       'Carp-REPL';
