@@ -1,5 +1,16 @@
 Revision history for Carp-REPL
 
+0.15    Mon Apr 5 15:24:24 2010
+        Fix tests to use the right Perl (jjore)
+        Shebang for Makefile.PL (jjore)
+        fix the 'repl' can't be exported bug (sunnavy)
+        Use Sub::Exporter since it's irrevocably in our dep tree
+            anyway (sunnavy)
+        Silence warning about v-string (doy)
+        Documentation fixes (Sartak)
+        Passing in an explicit undef to repl will silence the
+            stacktrace (Sartak)
+
 0.14    Mon Feb 9 17:21:13 2009
         Devel::REPL no longer depends on Lexical::Persistence, so we must
 
