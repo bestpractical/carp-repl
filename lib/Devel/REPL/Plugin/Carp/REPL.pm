@@ -24,6 +24,11 @@ has stacktrace => (
             until @{ $stacktrace->{raw} } == 0
                || $stacktrace->{raw}[0]{caller}[3] eq 'Carp::REPL::repl';
 
+        # get out of Carp::
+        shift @{ $stacktrace->{raw} }
+            until @{ $stacktrace->{raw} } == 0
+               || $stacktrace->{raw}[0]{caller}[0] !~ /^Carp(?:::|$)/;
+
         shift @{ $stacktrace->{raw} }
             until @{ $stacktrace->{raw} } == 0
                || $Carp::REPL::bottom_frame-- <= 0;
