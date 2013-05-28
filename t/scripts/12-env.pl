@@ -41,7 +41,7 @@ sub four
         my ($alpha, $beta, $gamma, $delta) = @_;
         five($alpha + $beta + $gamma + $delta);
     };
-    $closure->(values %args);
+    $closure->(sort values %args);
 }
 
 sub five
