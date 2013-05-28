@@ -1,5 +1,9 @@
 Revision history for Carp-REPL
 
+0.16    Tue May 28 15:10:26 PDT 2013
+        * Fix hash ordering dependence in test (ilmari)
+        * don't return stack frames inside Carp (DOY)
+
 0.15    Mon Apr 5 15:24:24 2010
         Fix tests to use the right Perl (jjore)
         Shebang for Makefile.PL (jjore)
