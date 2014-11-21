@@ -17,6 +17,7 @@ has stacktrace => (
     default => sub {
         my $stacktrace = Devel::StackTrace::WithLexicals->new(
             ignore_class => ['Carp::REPL', __PACKAGE__],
+            unsafe_ref_capture => 1,
         );
 
         # skip all the Moose metaclass frames
