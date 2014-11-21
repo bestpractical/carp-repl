@@ -1,5 +1,10 @@
 Revision history for Carp-REPL
 
+0.17    Fri Nov 21 10:18:19 PST 2014
+        * Fix compatibility with Devel::StackTrace 2.00, thanks to DAKKAR.
+          The incompat manifested as lots of test failures about refs.  Fixes
+          [rt.cpan.org #100314].
+
 0.16    Tue May 28 15:10:26 PDT 2013
         * Fix hash ordering dependence in test (ilmari)
         * don't return stack frames inside Carp (DOY)

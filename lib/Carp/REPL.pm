@@ -2,7 +2,7 @@ package Carp::REPL;
 use strict;
 use warnings;
 use 5.006000;
-our $VERSION = '0.16';
+our $VERSION = '0.17';
 
 our $noprofile = 0;
 our $bottom_frame = 0;
