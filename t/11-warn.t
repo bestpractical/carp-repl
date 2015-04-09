@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Test::More tests => 7;
 use Test::Expect;
+use lib 't/lib';
+use TestHelpers qw(e_value e_defined);
 
 expect_run
 (
@@ -14,9 +16,7 @@ expect_run
 expect_send('1 + 1');
 expect_like(qr/2/);
 
-expect_send('$a');
-expect_like(qr/\b4\b/);
+e_value('$a',4);
 
-expect_send('$b');
-expect_like(qr/\A\s*\$b\s*\Z/);
+e_defined('$b',0);
 

@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Test::More tests => 37;
 use Test::Expect;
+use lib 't/lib';
+use TestHelpers qw(e_value e_defined);
 
 expect_run
 (
@@ -14,54 +16,25 @@ expect_run
 expect_send('1 + 1');
 expect_like(qr/\b2\b/, 'in the REPL');
 
-expect_send('$pre_lexical');
-expect_like(qr/\balpha\b/);
+e_value('$pre_lexical','alpha');
+e_value('$pre_global_safe','sheep');
+e_value('$inner_lexical','parking');
+e_value('$inner_global','to');
+e_value('$pre_global','shadow stabbing');
+e_value('$post_global','go');
+e_value('$main::post_global','go');
 
-expect_send('$pre_global_safe');
-expect_like(qr/\bsheep\b/);
+e_defined('$post_local',0);
+e_defined('$postcall_local',0);
+e_defined('$postcall_global',0);
+e_defined('$other_lexical',0);
 
-expect_send('$inner_lexical');
-expect_like(qr/\bparking\b/);
+e_value('$other_global','long jacket');
+e_value('$main::other_global','long jacket');
 
-expect_send('$inner_global');
-expect_like(qr/\bto\b/);
+e_defined('$birds',0);
+e_defined('$window',0);
 
-expect_send('$pre_global');
-expect_like(qr/\bshadow stabbing\b/);
+e_value('$Mr::Mastodon::Farm::birds','fall');
 
-expect_send('$post_global');
-expect_like(qr/\bgo\b/);
-
-expect_send('$main::post_global');
-expect_like(qr/\bgo\b/);
-
-expect_send('$post_local');
-expect_like(qr/^\s*\$post_local\s*$/m);
-
-expect_send('$postcall_local');
-expect_like(qr/^\s*\$postcall_local\s*$/m);
-
-expect_send('$postcall_global');
-expect_like(qr/^\s*\$postcall_global\s*$/m);
-
-expect_send('$other_lexical');
-expect_like(qr/^\s*\$other_lexical\s*$/m);
-
-expect_send('$other_global');
-expect_like(qr/\blong jacket\b/);
-
-expect_send('$main::other_global');
-expect_like(qr/\blong jacket\b/);
-
-expect_send('$birds');
-expect_like(qr/^\s*\$birds\s*$/m);
-
-expect_send('$window');
-expect_like(qr/^\s*\$window\s*$/m);
-
-expect_send('$Mr::Mastodon::Farm::birds');
-expect_like(qr/\bfall\b/);
-
-expect_send('$Mr::Mastodon::Farm::window');
-expect_is('$Mr::Mastodon::Farm::window', 'output was exactly what we gave to the repl, meaning the output was undef');
-
+e_defined('$Mr::Mastodon::Farm::window',0);

@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Test::More tests => 55;
 use Test::Expect;
+use lib 't/lib';
+use TestHelpers qw(e_value e_defined);
 
 expect_run
 (
@@ -25,38 +27,32 @@ expect_like(qr{^main::fib\(5\) called at t/scripts/07-frame\.pl line 12}m);
 expect_send('1 + 1');
 expect_like(qr/\b2\b/, 'in the REPL');
 
-expect_send('$n');
-expect_like(qr/-1\b/);
+e_value('$n',-1);
 
 expect_send(':u');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:9 \(frame 1\)\.});
 
-expect_send('$n');
-expect_like(qr/\b0\b/);
+e_value('$n',0);
 
 expect_send(':up');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:9 \(frame 2\)\.});
 
-expect_send('$n');
-expect_like(qr/\b1\b/);
+e_value('$n',1);
 
 expect_send(':d');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:9 \(frame 1\)\.});
 
-expect_send('$n');
-expect_like(qr/\b0\b/);
+e_value('$n',0);
 
 expect_send(':down');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:8 \(frame 0\)\.});
 
-expect_send('$n');
-expect_like(qr/-1\b/);
+e_value('$n',-1);
 
 expect_send(':d');
 expect_like(qr{\bYou're already at the bottom frame\.});
 
-expect_send('$n');
-expect_like(qr/-1\b/);
+e_value('$n',-1);
 
 expect_send('my $m = 10');
 expect_like(qr/\b10\b/);
@@ -64,8 +60,7 @@ expect_like(qr/\b10\b/);
 expect_send(':u');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:9 \(frame 1\)\.});
 
-expect_send('$m');
-expect_like(qr/^\s*\$m\s*$/m);
+e_value('$m',10);
 
 expect_send(':t');
 # examine the stack trace
@@ -81,8 +76,7 @@ expect_like(qr{main::fib\(5\) called at t/scripts/07-frame\.pl line 12}m);
 expect_send(':bottom');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:8 \(frame 0\)\.});
 
-expect_send('$m');
-expect_like(qr/^\s*\$m\s*$/m);
+e_value('$m',10);
 
 expect_send(':top');
 expect_like(qr{\bNow at t/scripts/07-frame\.pl:12 \(frame 7\)\.});
