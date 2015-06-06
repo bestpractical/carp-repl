@@ -1,5 +1,6 @@
 Revision history for Carp-REPL
 
+0.18    Fri  5 Jun 2015 19:57:52 PDT
         * Fix tests that started failing since Test::Expect 0.32 (Gianni
           Ceccarelli, RT#103414)
 
