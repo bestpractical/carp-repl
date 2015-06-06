@@ -3,7 +3,7 @@ package Devel::REPL::Plugin::Carp::REPL;
 our $VERSION = '0.18';
 
 use Devel::REPL::Plugin;
-#use namespace::clean -except => [ 'meta' ];
+use namespace::autoclean;
 use Devel::LexAlias;
 use Devel::StackTrace::WithLexicals;
 use Data::Dump::Streamer;

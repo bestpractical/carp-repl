@@ -57,7 +57,7 @@ my %WriteMakefileArgs = (
                     'Devel::StackTrace::WithLexicals' => '0',
                     'Devel::LexAlias'                 => '0',
                     'Devel::REPL'                     => '0',
-                    'namespace::clean'                => '0',
+                    'namespace::autoclean'            => '0',
                     'Data::Dump::Streamer'            => '0',
                     'Lexical::Persistence'            => '0',
                 },
