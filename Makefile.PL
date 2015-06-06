@@ -1,5 +1,6 @@
 use strict;
 use warnings;
+use utf8;
 use ExtUtils::MakeMaker;
 
 my $developer = -f '.gitignore';
@@ -32,6 +33,16 @@ my %WriteMakefileArgs = (
             },
         },
         x_authority => 'cpan:SARTAK',
+        x_contributors => [ # manually added, from git shortlog -e -s -n
+            'Shawn M Moore <sartak@bestpractical.com>',
+            'Karen Etheridge <ether@cpan.org>',
+            'Thomas Sibley <trs@bestpractical.com>',
+            'sunnavy <sunnavy@bestpractical.com>',
+            'Josh ben Jore <jjore@cpan.org>',
+            'Jesse Luehrs <doy@tozt.net>',
+            'Gianni Ceccarelli <gianni.ceccarelli@net-a-porter.com>',
+            'Dagfinn Ilmari Mannsåker <ilmari@ilmari.org>',
+        ],
     },
 
     META_ADD => {
