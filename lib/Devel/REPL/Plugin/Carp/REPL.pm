@@ -1,6 +1,9 @@
 package Devel::REPL::Plugin::Carp::REPL;
+
+our $VERSION = '0.18';
+
 use Devel::REPL::Plugin;
-#use namespace::clean -except => [ 'meta' ];
+use namespace::autoclean;
 use Devel::LexAlias;
 use Devel::StackTrace::WithLexicals;
 use Data::Dump::Streamer;
@@ -17,6 +20,7 @@ has stacktrace => (
     default => sub {
         my $stacktrace = Devel::StackTrace::WithLexicals->new(
             ignore_class => ['Carp::REPL', __PACKAGE__],
+            unsafe_ref_capture => 1,
         );
 
         # skip all the Moose metaclass frames

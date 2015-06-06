@@ -38,10 +38,10 @@ expect_send('@$_a');
 expect_like(qr/\bI I\b/);
 
 expect_send(':u');
-expect_send('@$_a');
-expect_like(qr/\bI\b/);
+expect_send('"<@$_a>"');
+expect_like(qr/^<I>$/m);
 
 expect_send(':u');
-expect_send('@$_a');
-expect_like(qr/\A\@\$_a\Z/);
+expect_send('"<@$_a>"');
+expect_like(qr/^<>$/m);
 

@@ -1,0 +1,21 @@
+package TestHelpers;
+use strict;
+use warnings;
+use 5.006000;
+use Sub::Exporter -setup => {
+    exports => [qw(e_value e_defined)],
+};
+
+sub e_value {
+    my ($name,$expected,$note) = @_;
+    expect_send($name);
+    expect_like(qr/\b\Q$expected\E\b/,$note);
+}
+sub e_defined {
+    my ($name,$defined,$note) = @_;
+    expect_send("defined($name)?:'ok':'not'");
+    my $r = $defined ? qr/\bok\b/ : qr/\bnot\b/;
+    expect_like($r,$note);
+}
+
+1;
